@@ -1,54 +1,55 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
+using DAL;
 using DataModel;
 using DataModel.Dtos;
+using NUnit.Framework;
 
-namespace DAL
+namespace Tests
 {
-  public class Data
+  public class MoveColumnTests
   {
-    private IEnumerable<Column> _columns { get; set; }
-    private IEnumerable<Card> _cards { get; set; }
+    private Data data;
 
-    public Data()
+    [SetUp]
+    public void Setup()
     {
-      _columns = new[]
-      {
-        new Column
+      data = new Data
+      (
+        new List<Column>
         {
-          Id = 1,
-          OrderNo = 1,
-          Title = "BackendColumnTitleForColumnOne"
+          new Column
+          {
+            Id = 1,
+            OrderNo = 1,
+            Title = "BackendColumnTitleForColumnOne"
+          },
+          new Column
+          {
+            Id = 2,
+            OrderNo = 2,
+            Title = "BackendColumnTitleForColumnTwo"
+          },
+          new Column
+          {
+            Id = 3,
+            OrderNo = 3,
+            Title = "BackendColumnTitleForColumnThree"
+          },
+          new Column
+          {
+            Id = 4,
+            OrderNo = 4,
+            Title = "BackendColumnTitleForColumnFour"
+          },
+          new Column
+          {
+            Id = 5,
+            OrderNo = 5,
+            Title = "BackendColumnTitleForColumnFive"
+          }
         },
-        new Column
-        {
-          Id = 2,
-          OrderNo = 2,
-          Title = "BackendColumnTitleForColumnTwo"
-        },
-        new Column
-        {
-          Id = 3,
-          OrderNo = 3,
-          Title = "BackendColumnTitleForColumnThree"
-        },
-        new Column
-        {
-          Id = 4,
-          OrderNo = 4,
-          Title = "BackendColumnTitleForColumnFour"
-        },
-        new Column
-        {
-          Id = 5,
-          OrderNo = 5,
-          Title = "BackendColumnTitleForColumnFive"
-        }
-      };
-
-      _cards = new List<Card>
+        new List<Card>
         {
           new Card{
             Id = 1,
@@ -139,99 +140,117 @@ namespace DAL
             Title = "TestCard6",
             Description = "6TestLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongDescription",
             ColumnId = 5
-          },
-        };
-    }
-
-    public Data(IEnumerable<Column> columns, IEnumerable<Card> cards)
-    {
-      _columns = columns;
-      _cards = cards;
-    }
-
-    public IEnumerable<Card> Cards => _cards;
-
-    public IEnumerable<ColumnDto> Columns => _columns.Select(col => new ColumnDto
-    {
-      Id = col.Id,
-      OrderNo = col.OrderNo,
-      Title = col.Title,
-      Cards = Cards.Where(car => car.ColumnId == col.Id)
-    });
-
-    public bool MoveCard(MoveCardDto moveCardDto)
-    {
-      //var card = Columns.SelectMany(column => column.Cards).FirstOrDefault(c => c.Id == moveCardDto.CardId);
-
-      //var currentColumn = card?.Column;
-      //currentColumn?.Cards.ToList().Remove(card);
-
-      //Columns.FirstOrDefault(col => col.Id == moveCardDto.TargetColumnId)?.Cards.ToList().Add(card);
-
-      //return Columns;
-
-      var card = Cards.FirstOrDefault(car => car.Id == moveCardDto.CardId);
-      if (card == null)
-      {
-        Log();
-        return false;
-      }
-
-      card.ColumnId = moveCardDto.TargetColumnId;
-
-      return true;
-    }
-
-    public bool MoveColumn(MoveColumnDto moveColumnDto)
-    {
-      try
-      {
-        //change 0-based to 1-based
-        moveColumnDto.NewColumnOrderNo++;
-        moveColumnDto.PreviousColumnOrderNo++;
-
-        if (moveColumnDto.NewColumnOrderNo == moveColumnDto.PreviousColumnOrderNo)
-          return true;
-
-        var column = _columns.FirstOrDefault(col => col.OrderNo == moveColumnDto.PreviousColumnOrderNo);
-
-        if (column == null)
-        {
-          Log();
-          return false;
+          }
         }
-
-        column.OrderNo = moveColumnDto.NewColumnOrderNo;
-        
-        if (moveColumnDto.NewColumnOrderNo > moveColumnDto.PreviousColumnOrderNo)
-        {
-          _columns.Where(col =>
-              col.OrderNo <= moveColumnDto.NewColumnOrderNo &&
-              col.OrderNo > moveColumnDto.PreviousColumnOrderNo &&
-              col.Id != column.Id)
-            .ToList().ForEach(col => { col.OrderNo--; });
-        }
-        else
-        {
-          _columns.Where(col =>
-              col.OrderNo >= moveColumnDto.NewColumnOrderNo &&
-              col.OrderNo < moveColumnDto.PreviousColumnOrderNo &&
-              col.Id != column.Id)
-            .ToList().ForEach(col => { col.OrderNo++; });
-        }
-      }
-      catch (Exception e)
-      {
-        Log();
-        return false;
-      }
-
-      return true;
+      );
     }
 
-    private void Log()
+    [Test]
+    public void GeneralTest()
     {
-      //throw new NotImplementedException();
+      data.MoveColumn(new MoveColumnDto(2, 4));
+
+      Assert.AreEqual(1, data.Columns.First(col => col.Id == 1).OrderNo);
+      Assert.AreEqual(4, data.Columns.First(col => col.Id == 2).OrderNo);
+      Assert.AreEqual(2, data.Columns.First(col => col.Id == 3).OrderNo);
+      Assert.AreEqual(3, data.Columns.First(col => col.Id == 4).OrderNo);
+      Assert.AreEqual(5, data.Columns.First(col => col.Id == 5).OrderNo);
+    }
+
+    [Test]
+    public void NeighborsTest()
+    {
+      data.MoveColumn(new MoveColumnDto(2, 3));
+
+      Assert.AreEqual(1, data.Columns.First(col => col.Id == 1).OrderNo);
+      Assert.AreEqual(3, data.Columns.First(col => col.Id == 2).OrderNo);
+      Assert.AreEqual(2, data.Columns.First(col => col.Id == 3).OrderNo);
+      Assert.AreEqual(4, data.Columns.First(col => col.Id == 4).OrderNo);
+      Assert.AreEqual(5, data.Columns.First(col => col.Id == 5).OrderNo);
+    }
+
+    [Test]
+    public void ToLeftEdgeTest()
+    {
+      data.MoveColumn(new MoveColumnDto(4, 1));
+
+      Assert.AreEqual(2, data.Columns.First(col => col.Id == 1).OrderNo);
+      Assert.AreEqual(3, data.Columns.First(col => col.Id == 2).OrderNo);
+      Assert.AreEqual(4, data.Columns.First(col => col.Id == 3).OrderNo);
+      Assert.AreEqual(1, data.Columns.First(col => col.Id == 4).OrderNo);
+      Assert.AreEqual(5, data.Columns.First(col => col.Id == 5).OrderNo);
+    }
+
+    [Test]
+    public void FromLeftEdgeTest()
+    {
+      data.MoveColumn(new MoveColumnDto(1, 4));
+
+      Assert.AreEqual(4, data.Columns.First(col => col.Id == 1).OrderNo);
+      Assert.AreEqual(1, data.Columns.First(col => col.Id == 2).OrderNo);
+      Assert.AreEqual(2, data.Columns.First(col => col.Id == 3).OrderNo);
+      Assert.AreEqual(3, data.Columns.First(col => col.Id == 4).OrderNo);
+      Assert.AreEqual(5, data.Columns.First(col => col.Id == 5).OrderNo);
+    }
+
+    [Test]
+    public void ToRightEdgeTest()
+    {
+      data.MoveColumn(new MoveColumnDto(2, 5));
+
+      Assert.AreEqual(1, data.Columns.First(col => col.Id == 1).OrderNo);
+      Assert.AreEqual(5, data.Columns.First(col => col.Id == 2).OrderNo);
+      Assert.AreEqual(2, data.Columns.First(col => col.Id == 3).OrderNo);
+      Assert.AreEqual(3, data.Columns.First(col => col.Id == 4).OrderNo);
+      Assert.AreEqual(4, data.Columns.First(col => col.Id == 5).OrderNo);
+    }
+
+    [Test]
+    public void FromRightEdgeTest()
+    {
+      data.MoveColumn(new MoveColumnDto(5, 2));
+
+      Assert.AreEqual(1, data.Columns.First(col => col.Id == 1).OrderNo);
+      Assert.AreEqual(3, data.Columns.First(col => col.Id == 2).OrderNo);
+      Assert.AreEqual(4, data.Columns.First(col => col.Id == 3).OrderNo);
+      Assert.AreEqual(5, data.Columns.First(col => col.Id == 4).OrderNo);
+      Assert.AreEqual(2, data.Columns.First(col => col.Id == 5).OrderNo);
+    }
+
+    [Test]
+    public void FromLeftEdgeToRightEdgeTest()
+    {
+      data.MoveColumn(new MoveColumnDto(1, 5));
+
+      Assert.AreEqual(5, data.Columns.First(col => col.Id == 1).OrderNo);
+      Assert.AreEqual(1, data.Columns.First(col => col.Id == 2).OrderNo);
+      Assert.AreEqual(2, data.Columns.First(col => col.Id == 3).OrderNo);
+      Assert.AreEqual(3, data.Columns.First(col => col.Id == 4).OrderNo);
+      Assert.AreEqual(4, data.Columns.First(col => col.Id == 5).OrderNo);
+    }
+
+    [Test]
+    public void FromRightEdgeToLeftEdgeTest()
+    {
+      data.MoveColumn(new MoveColumnDto(5, 1));
+
+      Assert.AreEqual(2, data.Columns.First(col => col.Id == 1).OrderNo);
+      Assert.AreEqual(3, data.Columns.First(col => col.Id == 2).OrderNo);
+      Assert.AreEqual(4, data.Columns.First(col => col.Id == 3).OrderNo);
+      Assert.AreEqual(5, data.Columns.First(col => col.Id == 4).OrderNo);
+      Assert.AreEqual(1, data.Columns.First(col => col.Id == 5).OrderNo);
+    }
+
+    [Test]
+    public void NoMoveTest()
+    {
+      data.MoveColumn(new MoveColumnDto(2, 2));
+
+      Assert.AreEqual(1, data.Columns.First(col => col.Id == 1).OrderNo);
+      Assert.AreEqual(2, data.Columns.First(col => col.Id == 2).OrderNo);
+      Assert.AreEqual(3, data.Columns.First(col => col.Id == 3).OrderNo);
+      Assert.AreEqual(4, data.Columns.First(col => col.Id == 4).OrderNo);
+      Assert.AreEqual(5, data.Columns.First(col => col.Id == 5).OrderNo);
     }
   }
 }
