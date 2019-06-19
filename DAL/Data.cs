@@ -20,19 +20,19 @@ namespace DAL
         {
           Id = 1,
           OrderNo = 1,
-          Title = "BackendColumnTitleForColumnOne"
+          Title = "ColumnOne"
         },
         new Column
         {
           Id = 2,
           OrderNo = 2,
-          Title = "BackendColumnTitleForColumnTwo"
+          Title = "BackendColumnTitleForColumnTwoqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"
         },
         new Column
         {
           Id = 3,
           OrderNo = 3,
-          Title = "BackendColumnTitleForColumnThree"
+          Title = "ColumnThree"
         },
         new Column
         {
@@ -220,7 +220,7 @@ namespace DAL
             .ToList().ForEach(col => { col.OrderNo++; });
         }
       }
-      catch (Exception e)
+      catch (Exception)
       {
         Log();
         return false;
