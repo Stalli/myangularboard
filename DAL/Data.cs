@@ -11,6 +11,7 @@ namespace DAL
   {
     private IEnumerable<Column> _columns { get; set; }
     private IEnumerable<Card> _cards { get; set; }
+    private IEnumerable<Comment> _comments { get; set; }
 
     public Data()
     {
@@ -141,6 +142,40 @@ namespace DAL
             ColumnId = 5
           },
         };
+
+      _comments = new List<Comment>
+      {
+        new Comment
+        {
+          Id = 1,
+          CardId = 1,
+          Text = "Awesome comment"
+        },
+        new Comment
+        {
+          Id = 2,
+          CardId = 1,
+          Text = "Qasdasdasd comment"
+        },
+        new Comment
+        {
+          Id = 3,
+          CardId = 2,
+          Text = "Adadsasdsdsd comment"
+        },
+        new Comment
+        {
+          Id = 4,
+          CardId = 2,
+          Text = "Ffweefefwefwefwefwefwef comment"
+        },
+        new Comment
+        {
+          Id = 5,
+          CardId = 3,
+          Text = "Fwdewdwede comment"
+        },
+      };
     }
 
     public Data(IEnumerable<Column> columns, IEnumerable<Card> cards)
@@ -149,14 +184,20 @@ namespace DAL
       _cards = cards;
     }
 
-    public IEnumerable<Card> Cards => _cards;
-
     public IEnumerable<ColumnDto> Columns => _columns.Select(col => new ColumnDto
     {
       Id = col.Id,
       OrderNo = col.OrderNo,
       Title = col.Title,
-      Cards = Cards.Where(car => car.ColumnId == col.Id)
+      Cards = _cards.Where(car => car.ColumnId == col.Id)
+    }).Take(3);
+
+    public IEnumerable<CardDto> Cards => _cards.Select(car => new CardDto
+    {
+      Id = car.Id,
+      Title = car.Title,
+      Description = car.Description,
+      Comments = _comments.Where(com => com.CardId == car.Id)
     });
 
     public bool MoveCard(MoveCardDto moveCardDto)
@@ -170,7 +211,7 @@ namespace DAL
 
       //return Columns;
 
-      var card = Cards.FirstOrDefault(car => car.Id == moveCardDto.CardId);
+      var card = _cards.FirstOrDefault(car => car.Id == moveCardDto.CardId);
       if (card == null)
       {
         Log();

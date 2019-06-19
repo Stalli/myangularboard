@@ -24,16 +24,16 @@ namespace MyAngularBoardBackend.Controllers
 
         // GET: api/Cards
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<CardDto> Get()
         {
-            return new string[] { "value1", "value2" };
+          return Data.Cards;
         }
 
         // GET: api/Cards/5
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public CardDto Get(int id)
         {
-            return JsonConvert.SerializeObject(Data.Cards.FirstOrDefault(card => card.Id == id));
+            return Data.Cards.FirstOrDefault(card => card.Id == id);
         }
 
         // POST: api/Cards
