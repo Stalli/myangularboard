@@ -11,8 +11,8 @@ namespace DAL
   {
     private static Data _instance;
     private List<Column> _columns { get; set; }
-    private IEnumerable<Card> _cards { get; set; }
-    private IEnumerable<Comment> _comments { get; set; }
+    private List<Card> _cards { get; set; }
+    private List<Comment> _comments { get; set; }
 
     private Data()
     {
@@ -181,7 +181,7 @@ namespace DAL
 
     public static Data Instance => _instance ?? (_instance = new Data());
 
-    public Data(List<Column> columns, IEnumerable<Card> cards)
+    public Data(List<Column> columns, List<Card> cards)
     {
       _columns = columns;
       _cards = cards;
@@ -295,6 +295,15 @@ namespace DAL
         OrderNo = orderNumber,
         Title = input.Title
       };
+    }
+
+    public Comment AddComment(Comment input)
+    {
+      input.Id = _comments.Max(com => com.Id) + 1;
+
+      _comments.Add(input);
+
+      return input;
     }
   }
 }
