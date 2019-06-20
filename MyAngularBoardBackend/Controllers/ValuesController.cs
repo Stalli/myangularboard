@@ -28,7 +28,6 @@ namespace MyAngularBoardBackend.Controllers
     [HttpPost]
     public void Post([FromBody] int value)
     {
-      var asd = 1;
     }
 
     // PUT api/values/5

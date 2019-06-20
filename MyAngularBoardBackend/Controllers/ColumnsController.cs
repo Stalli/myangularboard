@@ -14,17 +14,11 @@ namespace MyAngularBoardBackend.Controllers
   [Route("api/[controller]")]
   public class ColumnsController : Controller
   {
-    private Data Data { get; set; }
-
-    public ColumnsController()
-    {
-      Data = new Data();
-    }
     // GET: api/<controller>
     [HttpGet]
     public IEnumerable<ColumnDto> Get()
     {
-      return Data.Columns;
+      return Data.Instance.Columns;
     }
 
     // GET api/<controller>/5
@@ -36,15 +30,16 @@ namespace MyAngularBoardBackend.Controllers
 
     // POST api/<controller>
     [HttpPost]
-    public void Post([FromBody]string value)
+    public ColumnDto Post([FromBody]ColumnDto value)
     {
+      return Data.Instance.AddColumn(value);
     }
 
     // POST: api/columns/move
     [HttpPost("move")]
     public bool MoveColumns([FromBody] MoveColumnDto moveColumnDto)
     {
-      return Data.MoveColumn(moveColumnDto);
+      return Data.Instance.MoveColumn(moveColumnDto);
     }
 
     // PUT api/<controller>/5

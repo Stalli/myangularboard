@@ -9,13 +9,14 @@ namespace DAL
 {
   public class Data
   {
-    private IEnumerable<Column> _columns { get; set; }
+    private static Data _instance;
+    private List<Column> _columns { get; set; }
     private IEnumerable<Card> _cards { get; set; }
     private IEnumerable<Comment> _comments { get; set; }
 
-    public Data()
+    private Data()
     {
-      _columns = new[]
+      _columns = new List<Column>
       {
         new Column
         {
@@ -178,7 +179,9 @@ namespace DAL
       };
     }
 
-    public Data(IEnumerable<Column> columns, IEnumerable<Card> cards)
+    public static Data Instance => _instance ?? (_instance = new Data());
+
+    public Data(List<Column> columns, IEnumerable<Card> cards)
     {
       _columns = columns;
       _cards = cards;
@@ -272,7 +275,26 @@ namespace DAL
 
     private void Log()
     {
-      //throw new NotImplementedException();
+    }
+
+    public ColumnDto AddColumn(ColumnDto input)
+    {
+      var id = _columns.Max(col => col.Id) + 1;
+      var orderNumber = _columns.Max(col => col.OrderNo) + 1;
+
+      _columns.Add(new Column
+      {
+        Id = id,
+        OrderNo = orderNumber,
+        Title = input.Title
+      });
+
+      return new ColumnDto
+      {
+        Id = id,
+        OrderNo = orderNumber,
+        Title = input.Title
+      };
     }
   }
 }

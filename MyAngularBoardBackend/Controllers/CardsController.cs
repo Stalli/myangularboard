@@ -16,38 +16,31 @@ namespace MyAngularBoardBackend.Controllers
     [ApiController]
     public class CardsController : ControllerBase
     {
-      private Data Data { get; set; }
-      public CardsController()
-      {
-        Data = new Data();
-      }
-
         // GET: api/Cards
         [HttpGet]
         public IEnumerable<CardDto> Get()
         {
-          return Data.Cards;
+          return Data.Instance.Cards;
         }
 
         // GET: api/Cards/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public CardDto Get(int id)
         {
-            return Data.Cards.FirstOrDefault(card => card.Id == id);
+          return Data.Instance.Cards.FirstOrDefault(card => card.Id == id);
         }
 
         // POST: api/Cards
         [HttpPost]
         public void Post([FromBody] string value)
         {
-          var reasd = 1;
         }
 
         // POST: api/cards/move
         [HttpPost("move")]
         public bool MoveCards([FromBody] MoveCardDto moveCardDto)
         {
-          return Data.MoveCard(moveCardDto);
+          return Data.Instance.MoveCard(moveCardDto);
         }
 
         // PUT: api/Cards/5
