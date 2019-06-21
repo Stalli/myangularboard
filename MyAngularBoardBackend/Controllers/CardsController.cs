@@ -37,8 +37,8 @@ namespace MyAngularBoardBackend.Controllers
           return Data.Instance.AddCard(value);
         }
 
-        // POST: api/cards/move
-        [HttpPost("move")]
+    // POST: api/cards/move
+    [HttpPost("move")]
         public bool MoveCards([FromBody] MoveCardDto moveCardDto)
         {
           return Data.Instance.MoveCard(moveCardDto);
