@@ -305,5 +305,19 @@ namespace DAL
 
       return input;
     }
+
+    public CardDto AddCard(CardDto input)
+    {
+      input.Id = _cards.Max(car => car.Id) + 1;
+
+      _cards.Add(new Card
+      {
+        Id = input.Id,
+        ColumnId = input.ColumnId,
+        Title = input.Title
+      });
+
+      return input;
+    }
   }
 }

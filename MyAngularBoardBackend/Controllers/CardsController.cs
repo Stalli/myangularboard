@@ -32,8 +32,9 @@ namespace MyAngularBoardBackend.Controllers
 
         // POST: api/Cards
         [HttpPost]
-        public void Post([FromBody] string value)
+        public CardDto Post([FromBody] CardDto value)
         {
+          return Data.Instance.AddCard(value);
         }
 
         // POST: api/cards/move
