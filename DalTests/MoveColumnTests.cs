@@ -141,7 +141,8 @@ namespace Tests
             Description = "6TestLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongDescription",
             ColumnId = 5
           }
-        }
+        },
+        new List<Comment>()
       );
     }
 

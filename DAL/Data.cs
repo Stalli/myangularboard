@@ -181,10 +181,11 @@ namespace DAL
 
     public static Data Instance => _instance ?? (_instance = new Data());
 
-    public Data(List<Column> columns, List<Card> cards)
+    public Data(List<Column> columns, List<Card> cards, List<Comment> comments)
     {
       _columns = columns;
       _cards = cards;
+      _comments = comments;
     }
 
     public IEnumerable<ColumnDto> Columns => _columns.Select(col => new ColumnDto
@@ -200,8 +201,11 @@ namespace DAL
       Id = car.Id,
       Title = car.Title,
       Description = car.Description,
+      ColumnId = car.ColumnId,
       Comments = _comments.Where(com => com.CardId == car.Id)
     });
+
+    public IEnumerable<Comment> Comments => _comments.Select(c => c);
 
     public bool MoveCard(MoveCardDto moveCardDto)
     {
@@ -299,7 +303,7 @@ namespace DAL
 
     public Comment AddComment(Comment input)
     {
-      input.Id = _comments.Max(com => com.Id) + 1;
+      input.Id = (_comments.Any() ? _comments.Max(com => com.Id) : 0) + 1;
 
       _comments.Add(input);
 
@@ -318,6 +322,39 @@ namespace DAL
       });
 
       return input;
+    }
+
+    public void UpdateCard(CardDto input)
+    {
+      var card = _cards.FirstOrDefault(c => c.Id == input.Id);
+
+      card.Title = input.Title;
+      card.ColumnId = input.ColumnId;
+      card.Description = input.Description;
+
+
+      if (input.Comments == null)
+      {
+        _comments.RemoveAll(com => com.CardId == input.Id);
+      }
+      else
+      {
+        // some comment could be deleted from card at the front, but is still in card.Comments at the backend
+        _comments.RemoveAll(com =>
+          com.CardId == input.Id &&
+          !input.Comments.Select(ic => ic.Id).Contains(com.Id));
+
+        foreach (var comment in input.Comments)
+          UpdateComment(comment);
+      }
+    }
+
+    public void UpdateComment(Comment input)
+    {
+      var comment = _comments.FirstOrDefault(c => c.Id == input.Id) ?? AddComment(input);
+
+      comment.Text = input.Text;
+      comment.CardId = input.CardId;
     }
   }
 }

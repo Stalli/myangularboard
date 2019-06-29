@@ -46,8 +46,9 @@ namespace MyAngularBoardBackend.Controllers
 
         // PUT: api/Cards/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] CardDto value)
         {
+          Data.Instance.UpdateCard(value);
         }
 
         // DELETE: api/ApiWithActions/5
