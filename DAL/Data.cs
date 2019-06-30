@@ -234,10 +234,6 @@ namespace DAL
     {
       try
       {
-        //change 0-based to 1-based
-        moveColumnDto.NewColumnOrderNo++;
-        moveColumnDto.PreviousColumnOrderNo++;
-
         if (moveColumnDto.NewColumnOrderNo == moveColumnDto.PreviousColumnOrderNo)
           return true;
 
