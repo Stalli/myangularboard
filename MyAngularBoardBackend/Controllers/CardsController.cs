@@ -27,7 +27,8 @@ namespace MyAngularBoardBackend.Controllers
         [HttpGet("{id}")]
         public CardDto Get(int id)
         {
-          return Data.Instance.Cards.FirstOrDefault(card => card.Id == id);
+           var output = Data.Instance.Cards.FirstOrDefault(card => card.Id == id);
+           return output;
         }
 
         // POST: api/Cards
