@@ -194,7 +194,7 @@ namespace DAL
       OrderNo = col.OrderNo,
       Title = col.Title,
       Cards = _cards.Where(car => car.ColumnId == col.Id)
-    }).Take(3);
+    });
 
     public IEnumerable<CardDto> Cards => _cards.Select(car => new CardDto
     {
@@ -206,6 +206,11 @@ namespace DAL
     });
 
     public IEnumerable<Comment> Comments => _comments.Select(c => c);
+
+    public IEnumerable<ColumnDto> GetColumns(int count)
+    {
+      return Columns.Take(count);
+    }
 
     public bool MoveCard(MoveCardDto moveCardDto)
     {

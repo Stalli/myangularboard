@@ -18,7 +18,7 @@ namespace MyAngularBoardBackend.Controllers
     [HttpGet]
     public IEnumerable<ColumnDto> Get()
     {
-      return Data.Instance.Columns;
+      return Data.Instance.GetColumns(3);
     }
 
     // GET api/<controller>/5
