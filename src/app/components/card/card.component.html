@@ -1,0 +1,57 @@
+<div *ngIf="card">
+  <div class="modal-header">
+    <div>
+      <h1 class="cardTitle">{{card.title}}</h1>
+      <div>in list {{card.columnTitle}}</div>
+    </div>
+    <a class="icon-close" (click)="activeModal.dismiss('Cross click')"></a>
+  </div>
+
+  <div class="modal-body">
+    <div class="main">
+      <h1 class="cardHeader">Description</h1>
+      <div [ngSwitch]="descriptionAreaStatus">    
+        <div *ngSwitchCase="enums.DescriptionAreaStatus.HasDescription" class="description">
+          <p style="overflow-wrap: break-word" (click)="descriptionAreaStatus = enums.DescriptionAreaStatus.AddingDescription">
+            {{card.description}}
+          </p>
+        </div> 
+        <div *ngSwitchCase="enums.DescriptionAreaStatus.NoDescription">
+          <p>
+            <a class="descriptionStub" (click)="descriptionAreaStatus = enums.DescriptionAreaStatus.AddingDescription">Add a more detailed description…</a>
+          </p>    
+        </div> 
+        <div *ngSwitchCase="enums.DescriptionAreaStatus.AddingDescription">
+          <p>
+            <textarea class="descriptionChange" #description placeholder="Add a more detailed description…">{{card.description}}</textarea>
+            <button class="addButton" (click)="addDescription(description.value)">Save</button>
+            <a class="icon-close" (click)="setDescriptionAreaStatus()"></a>
+          </p>    
+        </div>
+      </div> 
+      <h1 class="cardHeader">Add Comment</h1>
+      <input class="commentInput" #comment />
+      <button class="addButton" (click)="saveComment(comment.value); comment.value=''">Save</button>
+      <ul class="comments">
+        <li *ngFor="let cardComment of card.comments" class="comment">
+          <div>{{cardComment.text}}</div>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar">
+      <div class="actions">
+        <h3>Actions</h3>
+        <a class="action" (click)="showDeleteConfirmation(deleteConfirmContent)">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #deleteConfirmContent>
+  <div class="deleteConfirmDialog">
+    <div class="modal-header">
+      <p>Delete card?</p>      
+      <a class="icon-close" (click)="activeModal.dismiss('Cross click')"></a>
+  </div>
+  </div>
+</ng-template>
+

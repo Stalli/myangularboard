@@ -1,0 +1,43 @@
+<div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="columns" (cdkDropListDropped)="dropColumn($event)">
+  <div cdkDropListGroup class="column-wrapper" *ngFor="let column of columns" cdkDrag [cdkDragData]="column.id">
+    <div class="column">
+      <div class="column-header">
+        <div class="column-header-edit-target"></div>
+        <p class="column-header-title">{{column.title}}</p>
+      </div>
+
+      <div class="scroller">
+        <div id={{column.id}} class="column-cards" cdkDropList [cdkDropListData]="column.cards" (cdkDropListDropped)="drop($event,column.id)" [cdkDropListConnectedTo]="getConnectedList()">
+          <div *ngFor="let card of column.cards" cdkDrag [cdkDragData]="card.id">
+            <!--<a class="column-card" routerLink="/card/{{card.id}}">{{card.title}}</a>-->
+            <a class="column-card" (click)="open(card.id)">{{card.title}}</a>
+          </div>
+        </div>
+
+        <div *ngIf="columnWithNewCardAreaOpened==column.id">
+          <textarea class="newCardTitle" #newCardTitle placeholder="Enter a title for this card…"></textarea>
+          <button (click)="addCard(column.id, newCardTitle.value); newCardTitle.value=''">Add card</button>
+          <button (click)="columnWithNewCardAreaOpened = null">x</button>
+        </div>
+
+        <div *ngIf="columnWithNewCardAreaOpened!=column.id">
+          <a class="addCardFooter" (click)="columnWithNewCardAreaOpened = column.id">
+            <span>Add a card</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column-wrapper another-column">
+    <div *ngIf="addAnotherListActive" class="addAnotherColumn-header">
+        <div>
+          <textarea rows="1" class="newColumnTitle" #newColumnTitle placeholder="Enter column title..."></textarea><br/>
+          <button class="addButton" (click)="addColumn(newColumnTitle.value); newColumnTitle.value=''">Add column</button>
+          <a class="icon-close" (click)="addAnotherListActive = false"></a>
+        </div>
+    </div>
+    <div *ngIf="!addAnotherListActive" class="addAnotherColumn-header">
+        <a class="column-header-title another-column-title" (click)="addAnotherListActive = true">Add another column</a>
+    </div>      
+  </div>
+</div>
