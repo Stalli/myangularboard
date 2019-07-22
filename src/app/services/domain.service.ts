@@ -23,7 +23,7 @@ export class DomainService {
   private productionUrl = `http://angularboardbackend2-env.ezgxrs7xpn.us-east-2.elasticbeanstalk.com`;
   private localhostPort = 5002;
   private localhostUrl = `https://localhost:${this.localhostPort}`;
-  private activeUrl = this.localhostUrl;
+  private activeUrl = this.productionUrl;
   private commentsUrl = `${this.activeUrl}/api/comments`;
   private columnsUrl = `${this.activeUrl}/api/columns`;
   private cardsUrl = `${this.activeUrl}/api/cards`
