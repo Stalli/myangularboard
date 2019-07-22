@@ -20,12 +20,15 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class DomainService {  
+  private productionUrl = `http://angularboardbackend2-env.ezgxrs7xpn.us-east-2.elasticbeanstalk.com`;
   private localhostPort = 5002;
-  private commentsUrl = `https://localhost:${this.localhostPort}/api/comments`;
-  private columnsUrl = `https://localhost:${this.localhostPort}/api/columns`;
-  private cardsUrl = `https://localhost:${this.localhostPort}/api/cards`
-  private cardsMovingUrl = `https://localhost:${this.localhostPort}/api/cards/move`;
-  private columnsMovingUrl = `https://localhost:${this.localhostPort}/api/columns/move`;
+  private localhostUrl = `https://localhost:${this.localhostPort}`;
+  private activeUrl = this.localhostUrl;
+  private commentsUrl = `${this.activeUrl}/api/comments`;
+  private columnsUrl = `${this.activeUrl}/api/columns`;
+  private cardsUrl = `${this.activeUrl}/api/cards`
+  private cardsMovingUrl = `${this.activeUrl}/api/cards/move`;
+  private columnsMovingUrl = `${this.activeUrl}/api/columns/move`;
 
   constructor(private http: HttpClient) { }
 
