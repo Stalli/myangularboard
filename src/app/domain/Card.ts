@@ -6,7 +6,7 @@ export class Card implements BaseEntity {
   id: number;
   title: string;
   //column: Column;
-  column: string;
+  columnTitle: string;
   columnId?: number;
   description: string;
   comments: MyComment[];
@@ -20,7 +20,7 @@ export class Card implements BaseEntity {
   static fromJSON(json): Card {
     const output = new Card(json['columnId'],json['title']);
     output.id = json['id'];
-    output.column = json['column'];
+    output.columnTitle = json['columnTitle'];
     output.comments = Object.keys(json['comments']).map(i => MyComment.fromJSON(json['comments'][i]));
     output.description = json['description'];
 

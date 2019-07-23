@@ -28,3 +28,7 @@
 .icon-close:before {
     content: url('app\icons\close24lightblack.png') ;
 }
+
+.quiet {
+    color:#6b778c;
+}
