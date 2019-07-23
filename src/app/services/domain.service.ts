@@ -7,6 +7,7 @@ import { Card } from '../domain/Card';
 import { Column } from '../domain/Column';
 import { MyComment } from '../domain/MyComment';
 import { BaseEntity } from '../domain/BaseEntity';
+import { environment } from '../../environments/environment';
 //import { CARDS } from '../domain/mock-domain';
 //import { COLUMNS } from '../domain/mock-domain';
 
@@ -19,11 +20,8 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class DomainService {  
-  private productionUrl = `http://angularboardbackend2-env.ezgxrs7xpn.us-east-2.elasticbeanstalk.com`;
-  private localhostPort = 5002;
-  private localhostUrl = `https://localhost:${this.localhostPort}`;
-  private activeUrl = this.productionUrl;
+export class DomainService {
+  private activeUrl = environment.apiUrl;
   private commentsUrl = `${this.activeUrl}/api/comments`;
   private columnsUrl = `${this.activeUrl}/api/columns`;
   private cardsUrl = `${this.activeUrl}/api/cards`
