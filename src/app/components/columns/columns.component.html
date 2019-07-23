@@ -16,8 +16,8 @@
 
         <div *ngIf="columnWithNewCardAreaOpened==column.id">
           <textarea class="newCardTitle" #newCardTitle placeholder="Enter a title for this card…"></textarea>
-          <button (click)="addCard(column.id, newCardTitle.value); newCardTitle.value=''">Add card</button>
-          <button (click)="columnWithNewCardAreaOpened = null">x</button>
+          <button class="addButton" (click)="addCard(column.id, newCardTitle.value); newCardTitle.value=''">Add card</button>
+          <a class="icon-close" (click)="columnWithNewCardAreaOpened = null"></a>
         </div>
 
         <div *ngIf="columnWithNewCardAreaOpened!=column.id">
