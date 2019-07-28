@@ -41,17 +41,22 @@
     <div class="sidebar">
       <div class="actions">
         <h3>Actions</h3>
-        <a class="action" (click)="showDeleteConfirmation(deleteConfirmContent)">Delete</a>
-      </div>
+        <a class="action" (click)="deleteConfirmationIsShown=true">Delete</a>
+        <div *ngIf="deleteConfirmationIsShown" class="cardDeletionConfirmation">
+          <div class="modal-header-mini">
+            <span class="title">Delete card?</span>
+            <a class="icon-close-mini" (click)="deleteConfirmationIsShown=false"></a>
+          </div>
+          <div class="modal-body-mini">
+            <div class="normalText">There is no undo.</div>
+            <button class="deleteButton">Delete</button>
+          </div>
+        </div>
+      </div>      
     </div>
   </div>
 </div>
-<ng-template #deleteConfirmContent>
-  <div class="deleteConfirmDialog">
-    <div class="modal-header">
-      <p>Delete card?</p>      
-      <a class="icon-close" (click)="activeModal.dismiss('Cross click')"></a>
-  </div>
-  </div>
-</ng-template>
+
+
+
 
