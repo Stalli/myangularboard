@@ -12,7 +12,6 @@ import { AppComponent } from './app.component';
 import { ColumnsComponent } from './components/columns/columns.component';
 import { CardComponent } from './components/card/card.component';
 import { InMemoryDataService } from './services/in-memory-data.service';
-import { ModalComponent } from './components/modal/modal.component';
 // import { BoardComponent } from './components/board/board.component';
 
 @NgModule({
@@ -20,7 +19,6 @@ import { ModalComponent } from './components/modal/modal.component';
     AppComponent,
     ColumnsComponent,
     CardComponent,
-    ModalComponent,
     // BoardComponent
   ],
   imports: [

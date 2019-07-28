@@ -15,12 +15,13 @@ import { EnumsService } from 'src/app/services/enums.service';
 @Component({
   selector: 'card',
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.css']
+  styleUrls: ['./card.component.less']
 })
 export class CardComponent implements OnInit {
   id:number;
   card:Card;
   descriptionAreaStatus:DescriptionAreaStatus;
+  deleteConfirmationIsShown:boolean = false;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -74,9 +75,5 @@ export class CardComponent implements OnInit {
   }
   showError() {
     this.snackBar.open('An error occured on saving. Please try again', null, { duration: 3000});
-  }
-
-  showDeleteConfirmation(content) {
-    this.modalService.open(content, { size: 'sm' });
   }
 }
