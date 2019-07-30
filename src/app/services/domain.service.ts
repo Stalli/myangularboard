@@ -44,6 +44,10 @@ export class DomainService {
     return this.http.put<T>(`${this.getUrl(entity)}/${entity.id}`, entity, httpOptions);
   }
 
+  deleteEntity<T extends BaseEntity>(entity: T): Observable<T> {
+    return this.http.delete<T>(`${this.getUrl(entity)}/${entity.id}`, httpOptions);
+  }
+
   getUrl<T>(entity: T): string {
     const type = entity.constructor.name;
     switch (type) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -22,6 +22,8 @@ export class CardComponent implements OnInit {
   card:Card;
   descriptionAreaStatus:DescriptionAreaStatus;
   deleteConfirmationIsShown:boolean = false;
+  
+  @Output() onDeleted = new EventEmitter<number>();
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -69,11 +71,25 @@ export class CardComponent implements OnInit {
       },
       error => {
         this.card.description = previousDescription;
-        this.showError();
+        this.showError('An error occured on saving. Please try again');
       }
     );
   }
-  showError() {
-    this.snackBar.open('An error occured on saving. Please try again', null, { duration: 3000});
+
+  showError(text: string) {
+    this.snackBar.open(text, null, { duration: 3000});
+  }
+
+  deleteCard()
+  {
+    this.domainService.deleteEntity(this.card).subscribe(
+      result => {
+        this.onDeleted.emit(3);
+        this.activeModal.dismiss();
+      },
+      error => {
+        this.showError('An error occured on card deletion');
+      }
+    );
   }
 }

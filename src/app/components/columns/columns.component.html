@@ -10,7 +10,7 @@
         <div id={{column.id}} class="column-cards" cdkDropList [cdkDropListData]="column.cards" (cdkDropListDropped)="drop($event,column.id)" [cdkDropListConnectedTo]="getConnectedList()">
           <div *ngFor="let card of column.cards" cdkDrag [cdkDragData]="card.id">
             <!--<a class="column-card" routerLink="/card/{{card.id}}">{{card.title}}</a>-->
-            <a class="column-card" (click)="open(card.id)">{{card.title}}</a>
+            <a class="column-card" (click)="open(card.id, column.id)">{{card.title}}</a>
           </div>
         </div>
 

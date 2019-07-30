@@ -30,9 +30,15 @@ export class ColumnsComponent implements OnInit {
       });
   }
 
-  open(id:number) {
+  open(cardId:number, columnId:number) {
     const modalRef = this.modalService.open(CardComponent, { size: 'lg' });
-    modalRef.componentInstance.id = id;//2;
+    modalRef.componentInstance.id = cardId;
+    modalRef.componentInstance.onDeleted.subscribe(
+      (_: any) => {
+        const currentColumn = this.columns.find(col => col.id == columnId);
+        currentColumn.cards = currentColumn.cards.filter(c => c.id != cardId)
+      }      
+    );
   }
 
   addCard(columnId: number, text: string) {
@@ -40,7 +46,6 @@ export class ColumnsComponent implements OnInit {
     const newCard = new Card(columnId, text);
     this.domainService.addEntity(newCard)
       .subscribe(card => {
-        // this.columns[columnId - 1].cards.push(card);
         this.columns.filter(c => c.id == columnId)[0].cards.push(card);
       });
   }
@@ -55,19 +60,11 @@ export class ColumnsComponent implements OnInit {
   }
 
   moveCard(cardId: number, targetColumnId: number) {
-    // const card = this.columns.reduce((col, u) => [ ...col, ...u.cards ], []).find(c => c.id == cardId);
-    // var index = this.columns.find(c => c.id == card.columnId).cards.findIndex(c => c.id == cardId);
-
-    // this.columns.find(c => c.id == card.columnId).cards.splice(index,1);
-    // card.columnId = targetColumnId;
-    // this.columns.find(c => c.id == targetColumnId).cards.push(card);
-
     this.domainService.moveCard(cardId, targetColumnId).subscribe();
   }
 
   moveColumn(previousIndex: number, currentIndex: number){
     this.domainService.moveColumn(previousIndex, currentIndex).subscribe();
-    // this.columns.sort((a, b) => {return a.orderNo - b.orderNo});// do I need it ?
   }
 
   drop(event: CdkDragDrop<string[]>, targetColumnId: number) {
@@ -75,8 +72,6 @@ export class ColumnsComponent implements OnInit {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       this.moveCard(event.item.data, targetColumnId);
-      //console.log("drop");
-      //console.log(event);
       transferArrayItem((event.previousContainer.data) as any,
         event.container.data,
         event.previousIndex,
