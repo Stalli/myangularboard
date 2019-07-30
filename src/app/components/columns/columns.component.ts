@@ -38,7 +38,7 @@ export class ColumnsComponent implements OnInit {
   addCard(columnId: number, text: string) {
     if (!text) { return; }
     const newCard = new Card(columnId, text);
-    this.domainService.addCard(newCard)
+    this.domainService.addEntity(newCard)
       .subscribe(card => {
         // this.columns[columnId - 1].cards.push(card);
         this.columns.filter(c => c.id == columnId)[0].cards.push(card);

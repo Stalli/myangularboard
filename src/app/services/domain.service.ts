@@ -30,30 +30,6 @@ export class DomainService {
 
   constructor(private http: HttpClient) { }
 
-  addComment(comment: MyComment): Observable<MyComment> {
-    console.log("test");
-    return this.http.post<MyComment>(this.commentsUrl, comment, httpOptions);
-  }
-
-  addCard(card: Card): Observable<Card> {
-    console.log("addCard in domain.service");
-    //CARDS.push(card);
-    return this.http.post<Card>(this.cardsUrl, card, httpOptions).pipe(
-      tap(_ => console.log("adding card succeed.")),
-      catchError(this.handleError<Card>('addCard'))
-    );
-  }
-
-  addColumn(column: Column): Observable<Column> {
-    return this.http.post<Column>(this.columnsUrl, column, httpOptions).pipe(
-      tap(result => {
-        const outcome = result ? `succeed` : `failed`;
-        console.log("addColumn "+ outcome)
-      }),
-      catchError(this.handleError<Column>('addCard'))
-    );
-  }
-
   addEntity<T>(entity: T): Observable<T> {
     return this.http.post<T>(this.getUrl(entity), entity, httpOptions).pipe(
       tap(result => {
