@@ -26,7 +26,7 @@ export class ColumnsComponent implements OnInit {
   getColumns(): void {
     this.domainService.getColumns()
       .subscribe(columns => {
-        this.columns = columns
+        this.columns = columns.sort((a,b) => a.orderNo - b.orderNo )
       });
   }
 
