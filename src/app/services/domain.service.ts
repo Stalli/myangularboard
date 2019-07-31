@@ -87,7 +87,6 @@ export class DomainService {
   }
 
   moveCard(cardId: number, targetColumnId: number): Observable<boolean> {
-    targetColumnId++;//here it's 0-based, but on the backend it's 1-based
     return this.http.post<boolean>(this.cardsMovingUrl, JSON.stringify({cardId, targetColumnId}), httpOptions).pipe(
         tap(_ => console.log("moving card " + cardId + " to column " + targetColumnId + " succeed.")),
         catchError(this.handleError<boolean>('moveCard'))
