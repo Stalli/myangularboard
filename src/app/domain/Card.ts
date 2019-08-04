@@ -9,6 +9,7 @@ export class Card implements BaseEntity {
   columnTitle: string;
   columnId?: number;
   description: string;
+  orderNo: number;
   comments: MyComment[];
 
   constructor(columnId: number, title: string) {
@@ -23,6 +24,7 @@ export class Card implements BaseEntity {
     output.columnTitle = json['columnTitle'];
     output.comments = Object.keys(json['comments']).map(i => MyComment.fromJSON(json['comments'][i]));
     output.description = json['description'];
+    output.orderNo = json['orderNo'];
 
     return output;
   }

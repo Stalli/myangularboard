@@ -26,6 +26,7 @@ export class ColumnsComponent implements OnInit {
   getColumns(): void {
     this.domainService.getColumns()
       .subscribe(columns => {
+        columns.forEach(col => col.cards.sort((a,b) => a.orderNo - b.orderNo))
         this.columns = columns.sort((a,b) => a.orderNo - b.orderNo )
       });
   }
@@ -59,8 +60,8 @@ export class ColumnsComponent implements OnInit {
       });
   }
 
-  moveCard(cardId: number, targetColumnId: number) {
-    this.domainService.moveCard(cardId, targetColumnId).subscribe();
+  moveCard(cardId: number, targetColumnId: number, previousIndexInColumn: number, currentIndexInColumn: number) {
+    this.domainService.moveCard(cardId, targetColumnId, previousIndexInColumn, currentIndexInColumn).subscribe();
   }
 
   moveColumn(previousIndex: number, currentIndex: number){
@@ -68,10 +69,11 @@ export class ColumnsComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>, targetColumnId: number) {
+    this.moveCard(event.item.data, targetColumnId, event.previousIndex, event.currentIndex);
+
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      this.moveCard(event.item.data, targetColumnId);
       transferArrayItem((event.previousContainer.data) as any,
         event.container.data,
         event.previousIndex,

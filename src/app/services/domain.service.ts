@@ -86,19 +86,23 @@ export class DomainService {
     //return of(COLUMNS.find(column => column.id === id));
   }
 
-  moveCard(cardId: number, targetColumnId: number): Observable<boolean> {
-    return this.http.post<boolean>(this.cardsMovingUrl, JSON.stringify({cardId, targetColumnId}), httpOptions).pipe(
+  moveCard(cardId: number, targetColumnId: number, previousOrderNo: number, newOrderNo: number): Observable<boolean> {
+    //change 0-based to 1-based
+    previousOrderNo++;
+    newOrderNo++;
+
+    return this.http.post<boolean>(this.cardsMovingUrl, JSON.stringify({cardId, targetColumnId, previousOrderNo, newOrderNo}), httpOptions).pipe(
         tap(_ => console.log("moving card " + cardId + " to column " + targetColumnId + " succeed.")),
         catchError(this.handleError<boolean>('moveCard'))
     );
   }
 
-  moveColumn(previousColumnOrderNo: number, newColumnOrderNo: number): Observable<boolean> {
+  moveColumn(previousOrderNo: number, newOrderNo: number): Observable<boolean> {
     //change 0-based to 1-based
-    newColumnOrderNo++;
-    previousColumnOrderNo++;
+    previousOrderNo++;
+    newOrderNo++;
 
-    return this.http.post<boolean>(this.columnsMovingUrl, JSON.stringify({previousColumnOrderNo, newColumnOrderNo}), httpOptions).pipe(
+    return this.http.post<boolean>(this.columnsMovingUrl, JSON.stringify({previousOrderNo, newOrderNo}), httpOptions).pipe(
       tap(result => {
         const outcome = result ? `succeed` : `failed`;
         console.log("moving column "+ outcome)
