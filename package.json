@@ -23,6 +23,7 @@
     "@angular/router": "~8.1.1",
     "@ng-bootstrap/ng-bootstrap": "^5.0.0",
     "angular-in-memory-web-api": "^0.8.0",
+    "angularx-social-login": "^1.2.7",
     "core-js": "^2.5.4",
     "rxjs": "~6.5.2",
     "tslib": "^1.9.0",
