@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { AuthService } from "angularx-social-login";
 
 import { Column } from '../../domain/Column';
 import { Card } from '../../domain/Card';
@@ -16,15 +17,19 @@ export class ColumnsComponent implements OnInit {
   columns: Column[];
   columnWithNewCardAreaOpened: number = null;
   addAnotherListActive: boolean = false;
+  userId: string;
 
-  constructor(private domainService: DomainService, private modalService: NgbModal) { }
+  constructor(private domainService: DomainService, private modalService: NgbModal, private authService: AuthService) { }
 
   ngOnInit() {
-    this.getColumns();
+    this.authService.authState.subscribe((user) => {
+      this.userId = user.id;
+      this.getColumns(this.userId);
+  });
   }
 
-  getColumns(): void {
-    this.domainService.getColumns()
+  getColumns(userId: string): void {
+    this.domainService.getColumns(userId)
       .subscribe(columns => {
         columns.forEach(col => col.cards.sort((a,b) => a.orderNo - b.orderNo))
         this.columns = columns.sort((a,b) => a.orderNo - b.orderNo )
@@ -53,7 +58,7 @@ export class ColumnsComponent implements OnInit {
 
   addColumn(title: string) {
     if (!title) { return; }
-    const column = new Column(title);
+    const column = new Column(title, this.userId);
     this.domainService.addEntity(column)
       .subscribe(column => {
         this.columns.push(column);

@@ -75,9 +75,10 @@ export class DomainService {
        );
   }
 
-  getColumns(): Observable<Column[]> {
+  getColumns(userId: string): Observable<Column[]> {
     //return of(COLUMNS);
-    return this.http.get<Column[]>(this.columnsUrl);
+    const url = `${this.columnsUrl}/${userId}`;
+    return this.http.get<Column[]>(url);
   }
 
   getColumn(id: number): Observable<Column> {
