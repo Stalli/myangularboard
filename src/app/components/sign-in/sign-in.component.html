@@ -1,9 +1,19 @@
-<p>This is MyAngularBoard</p>
-<button class="addButton" (click)="goToDemoBoard()">Demo board</button>
-<p>Sign in with</p>
-<button (click)="signInWithGoogle()">
-    <span class="google"></span>
-</button>
+<mat-card class="centeredInfo">
+    <mat-card-header>
+      <mat-card-title>Welcome to MyAngularBoard</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        Check out the <button class="addButton" (click)="goToDemoBoard()">Demo board</button>
+      </p>
+      <p>
+        Or sign in with
+      </p>
+      <button (click)="signInWithGoogle()">
+        <span class="google"></span>
+      </button>
+    </mat-card-content>
+  </mat-card>
 
 
 
