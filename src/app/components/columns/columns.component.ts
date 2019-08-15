@@ -23,13 +23,28 @@ export class ColumnsComponent implements OnInit {
 
   ngOnInit() {
     this.authService.authState.subscribe((user) => {
-      this.userId = user.id;
-      this.getColumns(this.userId);
+      if (user != null)
+      {
+        this.userId = user.id;
+        this.getColumns(this.userId);
+      }
+      else  
+      {
+        this.getColumnsDemo();
+      }
   });
   }
 
   getColumns(userId: string): void {
     this.domainService.getColumns(userId)
+      .subscribe(columns => {
+        columns.forEach(col => col.cards.sort((a,b) => a.orderNo - b.orderNo))
+        this.columns = columns.sort((a,b) => a.orderNo - b.orderNo )
+      });
+  }
+
+  getColumnsDemo(): void {
+    this.domainService.getColumnsDemo()
       .subscribe(columns => {
         columns.forEach(col => col.cards.sort((a,b) => a.orderNo - b.orderNo))
         this.columns = columns.sort((a,b) => a.orderNo - b.orderNo )

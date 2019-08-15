@@ -81,6 +81,10 @@ export class DomainService {
     return this.http.get<Column[]>(url);
   }
 
+  getColumnsDemo(): Observable<Column[]> {
+    return this.http.get<Column[]>(this.columnsUrl);
+  }
+
   getColumn(id: number): Observable<Column> {
     const url = `${this.columnsUrl}/${id}`;
     return this.http.get<Column>(url);

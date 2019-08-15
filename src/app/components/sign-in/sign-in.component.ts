@@ -38,4 +38,8 @@ export class SignInComponent implements OnInit {
   signOut(): void {
     this.authService.signOut();
   }
+
+  goToDemoBoard(): void {
+    this.router.navigate(['/columns']);
+  }
 }
