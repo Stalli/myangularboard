@@ -3,7 +3,7 @@ import { AuthService } from "angularx-social-login";
 import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'sign-in',
@@ -14,11 +14,12 @@ export class SignInComponent implements OnInit {
 
   private user: SocialUser;
   private loggedIn: boolean;
+  private authSubscription : Subscription;
 
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.authService.authState.subscribe((user) => {
+    this.authSubscription = this.authService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
       if (this.loggedIn)
@@ -28,6 +29,10 @@ export class SignInComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(){
+    this.authSubscription.unsubscribe();
+  }
+
   signInWithGoogle(): void {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
@@ -35,10 +40,6 @@ export class SignInComponent implements OnInit {
   signInWithFB(): void {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
   } 
-
-  signOut(): void {
-    this.authService.signOut();
-  }
 
   goToDemoBoard(): void {
     this.router.navigate(['/columns']);

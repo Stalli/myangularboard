@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { AuthService } from "angularx-social-login";
+import { Router } from '@angular/router';
 
 import { Column } from '../../domain/Column';
 import { Card } from '../../domain/Card';
 import { DomainService } from "../../services/domain.service";
 import { CardComponent } from '../card/card.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'columns',
@@ -19,10 +21,12 @@ export class ColumnsComponent implements OnInit {
   addAnotherListActive: boolean = false;
   userId: string;
 
-  constructor(private domainService: DomainService, private modalService: NgbModal, private authService: AuthService) { }
+  private authSubscription : Subscription;
+
+  constructor(private domainService: DomainService, private modalService: NgbModal, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.authService.authState.subscribe((user) => {
+    this.authSubscription = this.authService.authState.subscribe((user) => {
       if (user != null)
       {
         this.userId = user.id;
@@ -33,6 +37,10 @@ export class ColumnsComponent implements OnInit {
         this.getColumnsDemo();
       }
   });
+  }
+
+  ngOnDestroy(){
+    this.authSubscription.unsubscribe();
   }
 
   getColumns(userId: string): void {
@@ -108,5 +116,15 @@ export class ColumnsComponent implements OnInit {
 
   getConnectedList() {
     return this.columns.map(x => `${x.id}`);
+  }
+
+  logout() {
+    this.authService.signOut().then(() => {
+      this.goHome();
+    })
+  }
+
+  goHome() {
+    this.router.navigate(['/sign-in']);    
   }
 }

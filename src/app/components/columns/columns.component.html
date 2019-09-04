@@ -1,3 +1,10 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <span class="toolbar-spacer"></span>
+    <button *ngIf="userId" class="logoutButton" (click)="logout();">Log out</button>
+    <button *ngIf="!userId" class="logoutButton" (click)="goHome();">Home</button>
+  </mat-toolbar-row>
+</mat-toolbar>
 <div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="columns" (cdkDropListDropped)="dropColumn($event)">
   <div cdkDropListGroup class="column-wrapper" *ngFor="let column of columns" cdkDrag [cdkDragData]="column.id">
     <div class="column">

@@ -7,6 +7,7 @@ import { ColumnsComponent } from './components/columns/columns.component';
 
 const routes: Routes = [
   { path: '', component: SignInComponent },
+  { path: 'sign-in', component: SignInComponent },
   { path: 'card/:id', component: CardComponent },
   { path: 'columns', component: ColumnsComponent }
 ];
