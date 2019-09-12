@@ -1,4 +1,7 @@
-export class MyComment {
+import { BaseEntity } from './BaseEntity';
+
+export class MyComment implements BaseEntity {
+  className: string;
   id: number;
   cardId: number;
   text: string;
@@ -7,6 +10,7 @@ export class MyComment {
     
     this.cardId = cardId;
     this.text = message;
+    this.className = "MyComment";
   }
 
   static fromJSON(json): MyComment {

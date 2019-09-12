@@ -30,7 +30,7 @@ export class DomainService {
 
   constructor(private http: HttpClient) { }
 
-  addEntity<T>(entity: T): Observable<T> {
+  addEntity<T extends BaseEntity>(entity: T): Observable<T> {
     return this.http.post<T>(this.getUrl(entity), entity, httpOptions).pipe(
       tap(result => {
         const outcome = result ? `succeed` : `failed`;
@@ -48,8 +48,8 @@ export class DomainService {
     return this.http.delete<T>(`${this.getUrl(entity)}/${entity.id}`, httpOptions);
   }
 
-  getUrl<T>(entity: T): string {
-    const type = entity.constructor.name;
+  getUrl<T extends BaseEntity>(entity: T): string {
+    const type = entity.className;
     switch (type) {
       case "Column":
         return this.columnsUrl;

@@ -3,6 +3,7 @@ import { MyComment } from './MyComment';
 import { BaseEntity } from './BaseEntity';
 
 export class Card implements BaseEntity {
+  className: string;
   id: number;
   title: string;
   //column: Column;
@@ -16,6 +17,7 @@ export class Card implements BaseEntity {
     // this.id = cardId;
     this.columnId = columnId;
     this.title = title;
+    this.className = "Card";
   }
 
   static fromJSON(json): Card {
