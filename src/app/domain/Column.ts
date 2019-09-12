@@ -13,5 +13,6 @@ export class Column implements BaseEntity {
     this.title = title;
     this.userId = userId;
     this.className = "Column";
+    this.cards = []
   }
 }
